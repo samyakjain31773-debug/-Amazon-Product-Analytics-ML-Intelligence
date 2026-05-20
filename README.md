@@ -1,123 +1,287 @@
-# -Amazon-Product-Analytics-ML-Intelligence
-End-to-End Data Science Project | EDA · Feature Engineering · Machine Learning · Clustering
+# 🛒 Amazon Product Analytics & ML Intelligence
 
+> **End-to-End Data Science Project** — EDA · Feature Engineering · Machine Learning · Clustering
 
-📌 Project Overview
-This project performs a comprehensive data science pipeline on Amazon product data — from raw data ingestion and cleaning, through exploratory analysis and feature engineering, to predictive machine learning models and customer segmentation via clustering.
-The goal is to uncover what drives product ratings, pricing patterns, and customer behavior on Amazon, and to build models that can predict high-rated products.
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-Boosting-189AB4?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
 
-📊 Dataset Summary
-PropertyValueTotal Records1,465 productsTotal Features26 columns (after engineering)Price Range₹39 – ₹1,39,900Rating Range2.0 – 5.0Max Reviews4,26,973 (AmazonBasics HDMI Cable)
+---
 
-🔍 Pipeline Stages
-1. 🧹 Data Cleaning & Feature Engineering
+## 📌 Project Overview
 
-Removed nulls, duplicates, and malformed entries
-Parsed and standardized price fields (removed ₹ symbols, commas)
-Engineered features:
+This project performs a **comprehensive data science pipeline** on Amazon product data — starting from raw data ingestion and cleaning, through exploratory data analysis and feature engineering, all the way to predictive machine learning models and customer segmentation via clustering.
 
-savings = actual_price − discounted_price
-discount_ratio = discount / actual_price
-review_length, review_word_count
-high_rating (binary: rating ≥ 4.0)
-expensive_product, category_frequency, rating_per_review
-product_name_length, discount_difference_percent
+**The goal:** Uncover what drives product ratings, pricing patterns, and customer behavior on Amazon — and build models that predict high-rated products.
 
+---
 
+## 📂 Project Structure
 
+```
+Amazon-Product-Analytics/
+│
+├── Data Cleaning/
+│   └── Untitled.ipynb                 # Main analysis notebook
+│
+├── amazon_feature_engineered.csv      # Cleaned & engineered dataset
+│
+└── README.md
+```
 
-2. 📈 Exploratory Data Analysis (EDA)
-Top 10 Product Categories
-The dominant category is Computers & Accessories → Cables & Accessories → USB Cables with 233 products.
-CategoryCountComputers | Accessories | Cables | USBCables233Electronics | WearableTechnology | SmartWatches76Electronics | Mobiles | Smartphones68Electronics | HomeTheater | Televisions | SmartTVs63Electronics | Headphones | In-Ear52
-Key Observations
+---
 
-Rating Distribution: Majority of products rated between 4.0 – 4.5 (left-skewed, quality bias)
-Price Distribution: Highly right-skewed — most products priced under ₹5,000; luxury outliers up to ₹1,39,990
-Discount vs Rating: No strong linear correlation — discounts alone don't drive high ratings
-Correlation Heatmap reveals:
+## 📊 Dataset Summary
 
-discounted_price ↔ actual_price: 0.96 (very high)
-savings ↔ actual_price: 0.91
-high_rating ↔ rating: 0.76
-discount_ratio ↔ discount_percentage: −1.0 (inverse by design)
+| Property | Value |
+|:---|:---|
+| Total Records | 1,465 products |
+| Total Features | 26 columns (after engineering) |
+| Price Range | ₹39 – ₹1,39,900 |
+| Rating Range | 2.0 – 5.0 |
+| Max Reviews | 4,26,973 (AmazonBasics HDMI Cable) |
 
+---
 
+## 🔍 Pipeline Stages
 
+### Stage 1 — 🧹 Data Cleaning & Feature Engineering
 
-3. 🏆 Top Products
-Top Rated (Rating = 5.0):
+- Removed nulls, duplicates, and malformed entries
+- Parsed and standardized price fields (removed ₹ symbols, commas)
+- **Engineered 8+ new features:**
 
-Amazon Basics Wireless Mouse | 2.4 GHz
-Syncwire LTG to USB Cable for Fast Charging
-REDTECH USB-C to Lightning Cable 3.3FT
+| Feature | Description |
+|:---|:---|
+| `savings` | actual_price − discounted_price |
+| `discount_ratio` | discount / actual_price |
+| `review_length` | Character count of review text |
+| `review_word_count` | Word count of review text |
+| `high_rating` | Binary flag — rating ≥ 4.0 |
+| `expensive_product` | Binary flag for premium products |
+| `category_frequency` | How common a category is |
+| `rating_per_review` | Rating normalized by review count |
+| `product_name_length` | Length of product name |
+| `discount_difference_percent` | % difference between listed & actual discount |
 
-Most Reviewed:
+---
 
-AmazonBasics Flexible Premium HDMI Cable — 4,26,973 reviews
-boAt Bassheads 100 In Ear Wired Earphones — 3,63,713 reviews
+### Stage 2 — 📈 Exploratory Data Analysis (EDA)
 
-Most Expensive:
+#### 🔝 Top 10 Product Categories
 
-Sony Bravia 164cm 65" 4K UHD Smart TV — ₹1,39,990
-VU 164cm 65" The GloLED Series 4K Smart — ₹85,000
+| Category | Count |
+|:---|:---:|
+| Computers & Accessories → Cables → USB Cables | 233 |
+| Electronics → Wearable Technology → SmartWatches | 76 |
+| Electronics → Mobiles & Accessories → Smartphones | 68 |
+| Electronics → HomeTheater → Televisions → SmartTVs | 63 |
+| Electronics → Headphones → Earbuds → In-Ear | 52 |
+| Electronics → HomeTheater → Accessories → RemoteControls | 49 |
+| Home & Kitchen → Kitchen Appliances → MixerGrinders | 27 |
+| Computers & Accessories → Keyboards, Mice & Input Devices | 24 |
+| Electronics → HomeTheater → Accessories → HDMI Cables | 24 |
+| Home & Kitchen → Vacuum, Cleaning & Ironing → Irons | 24 |
 
+#### 📌 Key Observations
 
-4. 🤖 Machine Learning — Rating Regression
-Goal: Predict product rating using price, discount, and review features.
-Features Used:
-discounted_price, actual_price, discount_percentage, rating_count, savings, discount_ratio, review_length, review_word_count
-Model Comparison
-ModelMAERMSER² ScoreLinear Regression0.20420.27850.050Random Forest Regressor0.17790.26900.113XGBoost Regressor——0.045
+- **Rating Distribution** — Majority of products rated between **4.0 – 4.5** (left-skewed quality bias)
+- **Price Distribution** — Highly right-skewed; most products under ₹5,000 with luxury outliers up to ₹1,39,990
+- **Discount vs Rating** — No strong linear correlation; discounts alone don't drive high ratings
 
-Random Forest outperformed other regressors with the best R² of 0.113.
+#### 🔗 Correlation Highlights
 
-Feature Importance (Random Forest Regressor)
-RankFeatureImportance1rating_count0.27142savings0.13243review_word_count0.11784review_length0.11345discount_ratio0.11216discounted_price0.11007actual_price0.09118discount_percentage0.0518
+| Feature Pair | Correlation |
+|:---|:---:|
+| `discounted_price` ↔ `actual_price` | **+0.96** |
+| `savings` ↔ `actual_price` | **+0.91** |
+| `high_rating` ↔ `rating` | **+0.76** |
+| `discount_ratio` ↔ `discount_percentage` | **−1.00** |
 
-5. 🎯 Machine Learning — High Rating Classification
-Goal: Classify whether a product will be high-rated (rating ≥ 4.0) using a Random Forest Classifier.
-Results
-MetricScoreAccuracy79%Precision (Class 1)0.80Recall (Class 1)0.95F1-Score (Class 1)0.87Weighted Avg F10.76
-Confusion Matrix:
-              Predicted 0   Predicted 1
-Actual 0          23            51
-Actual 1          11           208
+---
 
-Model excels at identifying high-rated products (95% recall), making it highly useful for product recommendation systems.
+### Stage 3 — 🏆 Top Products
 
-Feature Importance (Classifier)
-RankFeatureImportance1rating_count0.16682discount_ratio0.13123review_length0.12864review_word_count0.12775discounted_price0.1195
+#### ⭐ Top Rated (Rating = 5.0)
+- Amazon Basics Wireless Mouse | 2.4 GHz Connect
+- Syncwire LTG to USB Cable for Fast Charging
+- REDTECH USB-C to Lightning Cable 3.3FT
 
-6. 🔵 KMeans Product Segmentation (Clustering)
-Features used: actual_price, discount_percentage, rating, rating_count
-Algorithm: KMeans (k=3), StandardScaler normalized
-Cluster Profiles
-ClusterAvg Price (₹)Avg Discount (%)Avg RatingAvg Reviews0 — Budget Value2,92848.8%4.0812,9131 — Premium36,04534.7%4.2215,2822 — Viral/Popular2,41047.4%4.162,21,815
-Insights:
+#### 💬 Most Reviewed
+- AmazonBasics Flexible Premium HDMI Cable — **4,26,973 reviews**
+- boAt Bassheads 100 In Ear Wired Earphones — **3,63,713 reviews**
+- Redmi 9A Sport (Coral Green, 2GB RAM, 32GB) — **3,13,836 reviews**
 
-Cluster 0 → Affordable, heavily discounted everyday products with moderate reviews
-Cluster 1 → Premium-priced products with lower discounts but higher ratings
-Cluster 2 → Low-priced but massively popular products (viral category leaders like HDMI cables, earphones)
+#### 💰 Most Expensive
+- Sony Bravia 164cm 65" 4K UHD Smart TV — **₹1,39,990**
+- VU 164cm 65" The GloLED Series 4K Smart — **₹85,000**
+- LG 139cm 55" 4K Ultra HD Smart LED TV — **₹79,990**
 
+---
 
-🛠️ Tech Stack
-LibraryPurposepandasData manipulation & cleaningnumpyNumerical computationsmatplotlibStatic visualizationsseabornStatistical plots & heatmapsplotlyInteractive chartsscikit-learnML models, preprocessing, metricsxgboostGradient boosting regressor
+### Stage 4 — 🤖 ML Regression: Predicting Product Rating
 
+**Goal:** Predict product `rating` using price, discount, and review engagement features.
 
+**Features (X):** `discounted_price`, `actual_price`, `discount_percentage`, `rating_count`, `savings`, `discount_ratio`, `review_length`, `review_word_count`
 
+**Target (y):** `rating`
 
+#### Model Performance Comparison
 
+| Model | MAE | RMSE | R² Score |
+|:---|:---:|:---:|:---:|
+| Linear Regression | 0.2042 | 0.2785 | 0.050 |
+| **Random Forest Regressor** | **0.1779** | **0.2690** | **0.113** ✅ |
+| XGBoost Regressor | — | — | 0.045 |
 
-ates
-Discounts don't guarantee high ratings — quality and reviews matter more
-79% accuracy in classifying high-rated products enables smarter product curation
-3 distinct market segments exist: budget-value, premium, and viral-popular products
-USB Cables & Accessories dominate Amazon India listings — high competition category
-Review engagement (length + word count) correlates strongly with product quality perception
+> ✅ **Random Forest** achieved the best performance with **R² = 0.113** and lowest MAE/RMSE.
 
+#### 📊 Feature Importance — Random Forest Regressor
 
-📬 Contact
-Project Author — Data Science & Analytics
-📧 samyaklundia@gmail.com
-🔗 www.linkedin.com/in/samyak-jain027
+| Rank | Feature | Importance |
+|:---:|:---|:---:|
+| 1 | `rating_count` | 0.2714 |
+| 2 | `savings` | 0.1324 |
+| 3 | `review_word_count` | 0.1178 |
+| 4 | `review_length` | 0.1134 |
+| 5 | `discount_ratio` | 0.1121 |
+| 6 | `discounted_price` | 0.1100 |
+| 7 | `actual_price` | 0.0911 |
+| 8 | `discount_percentage` | 0.0518 |
+
+---
+
+### Stage 5 — 🎯 ML Classification: Predicting High-Rated Products
+
+**Goal:** Classify whether a product will be high-rated (`rating ≥ 4.0`)
+
+**Algorithm:** Random Forest Classifier
+
+#### Classification Results
+
+| Metric | Score |
+|:---|:---:|
+| **Accuracy** | **79%** |
+| Precision (Class 1 — High Rated) | 0.80 |
+| Recall (Class 1 — High Rated) | 0.95 |
+| F1-Score (Class 1) | 0.87 |
+| Weighted Avg F1 | 0.76 |
+
+#### Confusion Matrix
+
+```
+                  Predicted: 0    Predicted: 1
+Actual: 0  (Low)      23              51
+Actual: 1  (High)     11             208
+```
+
+> ✅ Model achieves **95% Recall** for high-rated products — ideal for recommendation systems.
+
+#### 📊 Feature Importance — Classifier
+
+| Rank | Feature | Importance |
+|:---:|:---|:---:|
+| 1 | `rating_count` | 0.1668 |
+| 2 | `discount_ratio` | 0.1312 |
+| 3 | `review_length` | 0.1286 |
+| 4 | `review_word_count` | 0.1277 |
+| 5 | `discounted_price` | 0.1195 |
+| 6 | `savings` | 0.1190 |
+| 7 | `actual_price` | 0.1055 |
+| 8 | `discount_percentage` | 0.1017 |
+
+---
+
+### Stage 6 — 🔵 KMeans Product Segmentation (Clustering)
+
+**Algorithm:** KMeans (k=3) with StandardScaler normalization
+
+**Clustering Features:** `actual_price`, `discount_percentage`, `rating`, `rating_count`
+
+#### Cluster Profiles
+
+| Cluster | Segment Name | Avg Price (₹) | Avg Discount | Avg Rating | Avg Reviews |
+|:---:|:---|:---:|:---:|:---:|:---:|
+| **0** | 💚 Budget Value | 2,928 | 48.8% | 4.08 | 12,913 |
+| **1** | 🔴 Premium | 36,045 | 34.7% | 4.22 | 15,282 |
+| **2** | 🔵 Viral / Popular | 2,410 | 47.4% | 4.16 | 2,21,815 |
+
+#### Cluster Insights
+
+- **Cluster 0 — Budget Value:** Affordable, heavily discounted everyday products with moderate review counts
+- **Cluster 1 — Premium:** High-priced products with lower discounts but the best average ratings
+- **Cluster 2 — Viral/Popular:** Low-priced products with massive review counts — viral category leaders (HDMI cables, earphones, etc.)
+
+---
+
+## 🛠️ Tech Stack
+
+| Library | Purpose |
+|:---|:---|
+| `pandas` | Data manipulation & cleaning |
+| `numpy` | Numerical computations |
+| `matplotlib` | Static visualizations |
+| `seaborn` | Statistical plots & heatmaps |
+| `plotly` | Interactive charts |
+| `scikit-learn` | ML models, preprocessing, evaluation metrics |
+| `xgboost` | Gradient boosting regressor |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/samyakjain027/amazon-product-analytics.git
+cd amazon-product-analytics
+```
+
+### 2. Install Dependencies
+```bash
+pip install pandas numpy matplotlib seaborn plotly scikit-learn xgboost jupyter
+```
+
+### 3. Run the Notebook
+```bash
+jupyter notebook
+```
+Open `Data Cleaning/Untitled.ipynb` and run all cells top to bottom.
+
+---
+
+## 💡 Key Business Insights
+
+| # | Insight |
+|:---:|:---|
+| 1 | **Rating count** is the #1 predictor of a product's quality score — social proof dominates |
+| 2 | **Discounts don't guarantee high ratings** — quality and review engagement matter more |
+| 3 | **79% accuracy** in classifying high-rated products enables smarter product curation & recommendations |
+| 4 | **3 distinct market segments** exist: Budget-Value, Premium, and Viral-Popular |
+| 5 | **USB Cables & Accessories** dominate Amazon India listings — extremely high competition |
+| 6 | **Review length & word count** correlate strongly with product quality perception |
+
+---
+
+## 📬 Contact
+
+**Samyak Jain** — Data Science & Analytics
+
+[![Email](https://img.shields.io/badge/Email-samyaklundia@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:samyaklundia@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-samyak--jain027-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/samyak-jain027)
+[![GitHub](https://img.shields.io/badge/GitHub-samyakjain027-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/samyakjain027)
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+  <b>⭐ If you found this project helpful, please give it a star on GitHub! ⭐</b><br><br>
+  <sub>Built with ❤️ using Python & Jupyter | Amazon Product Intelligence</sub>
+</div>
