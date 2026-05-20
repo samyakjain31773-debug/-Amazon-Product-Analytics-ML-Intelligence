@@ -6,7 +6,7 @@
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
 ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/XGBoost-Boosting-189AB4?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
+
 
 ---
 
@@ -18,18 +18,6 @@ This project performs a **comprehensive data science pipeline** on Amazon produc
 
 ---
 
-## 📂 Project Structure
-
-```
-Amazon-Product-Analytics/
-│
-├── Data Cleaning/
-│   └── Untitled.ipynb                 # Main analysis notebook
-│
-├── amazon_feature_engineered.csv      # Cleaned & engineered dataset
-│
-└── README.md
-```
 
 ---
 
@@ -271,13 +259,9 @@ Open `Data Cleaning/Untitled.ipynb` and run all cells top to bottom.
 
 [![Email](https://img.shields.io/badge/Email-samyaklundia@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:samyaklundia@gmail.com)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-samyak--jain027-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/samyak-jain027)
-[![GitHub](https://img.shields.io/badge/GitHub-samyakjain027-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/samyakjain027)
+[![GitHub](https://img.shields.io/badge/GitHub-samyakjain027-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/samyakjain31773-debug)
 
 ---
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
 
